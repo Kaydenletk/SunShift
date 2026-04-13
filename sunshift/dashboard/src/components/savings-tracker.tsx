@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const MOCK_SAVINGS_DOLLARS = 142
-const ANNUAL_ESTIMATE = 1704
+const MONTHLY_GOAL = 160
 
 function useCountUp(target: number, durationMs = 1200): number {
   const [count, setCount] = useState(0)
@@ -30,8 +30,13 @@ function useCountUp(target: number, durationMs = 1200): number {
   return count
 }
 
-export function SavingsTracker() {
-  const displayValue = useCountUp(MOCK_SAVINGS_DOLLARS)
+interface SavingsTrackerProps {
+  monthlySavings?: number
+}
+
+export function SavingsTracker({ monthlySavings = MOCK_SAVINGS_DOLLARS }: SavingsTrackerProps) {
+  const annualEstimate = Math.round(monthlySavings * 12)
+  const displayValue = useCountUp(monthlySavings)
 
   return (
     <Card className="rounded-xl shadow-sm">
@@ -56,13 +61,13 @@ export function SavingsTracker() {
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>Monthly goal</span>
             <span className="font-medium text-green-600">
-              {Math.round((MOCK_SAVINGS_DOLLARS / 160) * 100)}%
+              {Math.round((monthlySavings / MONTHLY_GOAL) * 100)}%
             </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
             <div
               className="h-full rounded-full bg-green-500 transition-all duration-1000"
-              style={{ width: `${Math.min((MOCK_SAVINGS_DOLLARS / 160) * 100, 100)}%` }}
+              style={{ width: `${Math.min((monthlySavings / MONTHLY_GOAL) * 100, 100)}%` }}
             />
           </div>
         </div>
@@ -71,7 +76,7 @@ export function SavingsTracker() {
         <div className="rounded-lg bg-green-50 px-3 py-2.5">
           <p className="text-xs text-green-700/70">Estimated annual savings</p>
           <p className="font-mono text-lg font-semibold text-green-700">
-            ${ANNUAL_ESTIMATE.toLocaleString()}
+            ${annualEstimate.toLocaleString()}
           </p>
         </div>
 

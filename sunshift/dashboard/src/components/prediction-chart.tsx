@@ -74,16 +74,20 @@ function isPeakHour(isoString: string): boolean {
   return h >= 12 && h < 21
 }
 
-export function PredictionChart() {
+interface PredictionChartProps {
+  forecast?: HourlyForecast[]
+}
+
+export function PredictionChart({ forecast = MOCK_FORECAST }: PredictionChartProps) {
   // Find the first and last index of peak hours for ReferenceArea
-  const peakStart = MOCK_FORECAST.findIndex((d) => isPeakHour(d.hour))
-  const peakEnd = MOCK_FORECAST.reduce(
+  const peakStart = forecast.findIndex((d) => isPeakHour(d.hour))
+  const peakEnd = forecast.reduce(
     (last, d, i) => (isPeakHour(d.hour) ? i : last),
     -1
   )
 
-  const peakX1 = peakStart >= 0 ? MOCK_FORECAST[peakStart].hour : undefined
-  const peakX2 = peakEnd >= 0 ? MOCK_FORECAST[peakEnd].hour : undefined
+  const peakX1 = peakStart >= 0 ? forecast[peakStart].hour : undefined
+  const peakX2 = peakEnd >= 0 ? forecast[peakEnd].hour : undefined
 
   return (
     <Card className="rounded-xl shadow-sm">
@@ -111,7 +115,7 @@ export function PredictionChart() {
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart
-              data={MOCK_FORECAST}
+              data={forecast}
               margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
             >
               <defs>
