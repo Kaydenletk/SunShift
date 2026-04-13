@@ -1,0 +1,92 @@
+"use client"
+
+import { useEffect, useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+const MOCK_SAVINGS_DOLLARS = 142
+const ANNUAL_ESTIMATE = 1704
+
+function useCountUp(target: number, durationMs = 1200): number {
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    const startTime = performance.now()
+
+    function step(now: number) {
+      const elapsed = now - startTime
+      const progress = Math.min(elapsed / durationMs, 1)
+      // Ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.round(target * eased))
+      if (progress < 1) {
+        requestAnimationFrame(step)
+      }
+    }
+
+    const raf = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(raf)
+  }, [target, durationMs])
+
+  return count
+}
+
+export function SavingsTracker() {
+  const displayValue = useCountUp(MOCK_SAVINGS_DOLLARS)
+
+  return (
+    <Card className="rounded-xl shadow-sm">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+          Monthly Savings
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {/* Big number */}
+        <div className="flex items-end gap-1">
+          <span className="font-mono text-5xl font-bold text-green-600">
+            ${displayValue}
+          </span>
+          <span className="mb-1.5 text-sm text-muted-foreground">/ month</span>
+        </div>
+
+        <p className="text-sm text-muted-foreground">saved this month</p>
+
+        {/* Divider-like progress bar */}
+        <div className="space-y-1.5">
+          <div className="flex justify-between text-xs text-muted-foreground">
+            <span>Monthly goal</span>
+            <span className="font-medium text-green-600">
+              {Math.round((MOCK_SAVINGS_DOLLARS / 160) * 100)}%
+            </span>
+          </div>
+          <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+            <div
+              className="h-full rounded-full bg-green-500 transition-all duration-1000"
+              style={{ width: `${Math.min((MOCK_SAVINGS_DOLLARS / 160) * 100, 100)}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Annual estimate */}
+        <div className="rounded-lg bg-green-50 px-3 py-2.5">
+          <p className="text-xs text-green-700/70">Estimated annual savings</p>
+          <p className="font-mono text-lg font-semibold text-green-700">
+            ${ANNUAL_ESTIMATE.toLocaleString()}
+          </p>
+        </div>
+
+        {/* Breakdown */}
+        <div className="space-y-1.5 text-xs text-muted-foreground">
+          <div className="flex justify-between">
+            <span>Off-peak scheduling</span>
+            <span className="font-medium text-foreground font-mono">$89</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Peak avoidance</span>
+            <span className="font-medium text-foreground font-mono">$53</span>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
