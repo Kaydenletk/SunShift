@@ -23,7 +23,7 @@ export function HurricaneCard({ status = MOCK_HURRICANE_STATUS }: HurricaneCardP
   const isActive = status.shield_mode === "active"
 
   return (
-    <Card className="rounded-xl shadow-sm">
+    <Card className="rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md cursor-default">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">

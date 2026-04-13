@@ -69,7 +69,7 @@ export function StatusCard({ status = MOCK_STATUS }: StatusCardProps) {
   const config = STATUS_CONFIG[status.status]
 
   return (
-    <Card className="rounded-xl shadow-sm">
+    <Card className="rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md cursor-default">
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">

@@ -15,15 +15,14 @@ export function Header() {
         {/* Logo + name */}
         <div className="flex items-center gap-3">
           <div
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-white font-bold text-sm"
-            style={{ backgroundColor: "#0ea5e9" }}
+            className="flex h-8 w-8 items-center justify-center rounded-lg text-white font-bold text-sm bg-sky-500"
           >
             S
           </div>
           <span className="text-lg font-semibold tracking-tight text-foreground">
             SunShift
           </span>
-          <Badge variant="outline" className="hidden sm:inline-flex text-[#0ea5e9] border-[#0ea5e9]/30 bg-[#0ea5e9]/5">
+          <Badge variant="outline" className="hidden sm:inline-flex text-sky-500 border-sky-500/30 bg-sky-500/5">
             AI-Powered
           </Badge>
         </div>

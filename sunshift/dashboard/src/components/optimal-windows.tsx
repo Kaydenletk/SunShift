@@ -76,8 +76,8 @@ const RANK_STYLES = {
   2: {
     border: "border-blue-100",
     bg: "bg-blue-50/40",
-    rankBg: "bg-[#0ea5e9]",
-    costColor: "text-[#0ea5e9]",
+    rankBg: "bg-sky-500",
+    costColor: "text-sky-500",
     badgeClass: "bg-blue-50 text-blue-700 border-blue-100",
   },
   3: {
@@ -97,7 +97,7 @@ export function OptimalWindows({ windows = MOCK_WINDOWS }: OptimalWindowsProps) 
   const top3 = windows.slice(0, 3)
 
   return (
-    <Card className="rounded-xl shadow-sm">
+    <Card className="rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md cursor-default">
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-semibold">Optimal Sync Windows</CardTitle>
         <CardDescription>Best times to run heavy workloads today</CardDescription>

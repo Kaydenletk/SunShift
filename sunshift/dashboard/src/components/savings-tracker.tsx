@@ -10,6 +10,12 @@ function useCountUp(target: number, durationMs = 1200): number {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReduced) {
+      setCount(target)
+      return
+    }
+
     const startTime = performance.now()
 
     function step(now: number) {
@@ -39,7 +45,7 @@ export function SavingsTracker({ monthlySavings = MOCK_SAVINGS_DOLLARS }: Saving
   const displayValue = useCountUp(monthlySavings)
 
   return (
-    <Card className="rounded-xl shadow-sm">
+    <Card className="rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md cursor-default">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
           Monthly Savings

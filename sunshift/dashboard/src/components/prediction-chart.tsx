@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   ReferenceArea,
+  ReferenceLine,
   ResponsiveContainer,
 } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
@@ -60,7 +61,7 @@ function CustomTooltip({ active, payload }: CustomTooltipProps) {
   return (
     <div className="rounded-lg border border-border bg-white px-3 py-2 shadow-lg text-sm">
       <p className="font-medium text-foreground">{time}</p>
-      <p className="font-mono text-[#0ea5e9]">{d.cost_cents_kwh.toFixed(1)}¢/kWh</p>
+      <p className="font-mono text-sky-500">{d.cost_cents_kwh.toFixed(1)}¢/kWh</p>
       <p className="text-xs text-muted-foreground">
         Confidence: {(d.confidence * 100).toFixed(0)}%
       </p>
@@ -81,6 +82,8 @@ interface PredictionChartProps {
 export function PredictionChart({ forecast = MOCK_FORECAST }: PredictionChartProps) {
   // Find the first and last index of peak hours for ReferenceArea
   const peakStart = forecast.findIndex((d) => isPeakHour(d.hour))
+  // Current time indicator — first data point represents "now"
+  const nowX = forecast[0]?.hour
   const peakEnd = forecast.reduce(
     (last, d, i) => (isPeakHour(d.hour) ? i : last),
     -1
@@ -90,7 +93,7 @@ export function PredictionChart({ forecast = MOCK_FORECAST }: PredictionChartPro
   const peakX2 = peakEnd >= 0 ? forecast[peakEnd].hour : undefined
 
   return (
-    <Card className="rounded-xl shadow-sm">
+    <Card className="rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md cursor-default">
       <CardHeader className="pb-2">
         <div className="flex items-start justify-between">
           <div>
@@ -101,11 +104,11 @@ export function PredictionChart({ forecast = MOCK_FORECAST }: PredictionChartPro
           </div>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
-              <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#0ea5e9]/30 border border-[#0ea5e9]" />
+              <span className="inline-block h-2.5 w-2.5 rounded-sm bg-sky-500/30 border border-sky-500" />
               Cost
             </span>
             <span className="flex items-center gap-1">
-              <span className="inline-block h-2.5 w-2.5 rounded-sm bg-[#e9520d]/20 border border-[#e9520d]/40" />
+              <span className="inline-block h-2.5 w-2.5 rounded-sm bg-orange-600/20 border border-orange-600/40" />
               Peak hours
             </span>
           </div>
@@ -157,6 +160,14 @@ export function PredictionChart({ forecast = MOCK_FORECAST }: PredictionChartPro
                     fill: "#e9520d",
                     opacity: 0.7,
                   }}
+                />
+              )}
+              {nowX && (
+                <ReferenceLine
+                  x={nowX}
+                  stroke="#9ca3af"
+                  strokeDasharray="3 3"
+                  label={{ value: "Now", position: "top", fontSize: 10, fill: "#9ca3af" }}
                 />
               )}
               <Tooltip content={<CustomTooltip />} />

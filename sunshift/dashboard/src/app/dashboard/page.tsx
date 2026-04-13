@@ -1,4 +1,5 @@
 import { Header } from "@/components/header"
+import { MetricsBar } from "@/components/metrics-bar"
 import { StatusCard } from "@/components/status-card"
 import { PredictionChart } from "@/components/prediction-chart"
 import { SavingsTracker } from "@/components/savings-tracker"
@@ -97,6 +98,8 @@ export default async function DashboardPage() {
         <Header />
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
           <div className="space-y-5">
+            {/* Metrics summary bar */}
+            <MetricsBar />
             {/* Row 1: Status + Hurricane */}
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <StatusCard />
