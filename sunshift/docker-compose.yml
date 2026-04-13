@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount source directories for hot-reload during local development
+      - ./backend:/app/backend
+      - ./agent:/app/agent
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Override CMD to enable hot-reload in dev
+    command: >
+      uv run uvicorn backend.main:app
+        --host 0.0.0.0
+        --port 8000
+        --reload
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
