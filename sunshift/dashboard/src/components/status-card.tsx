@@ -9,7 +9,7 @@ interface StatusCardProps {
 
 const STATUS_CONFIG = {
   online: {
-    label: "All Systems Healthy",
+    label: "Monitoring Active",
     dotClass: "bg-green-500",
     pulseClass: "animate-ping bg-green-400",
     textClass: "text-green-600",
@@ -73,7 +73,7 @@ export function StatusCard({ status = MOCK_STATUS }: StatusCardProps) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
           <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-            Agent Status
+            System Protection
           </CardTitle>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +93,29 @@ export function StatusCard({ status = MOCK_STATUS }: StatusCardProps) {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Backup status — promoted to top */}
+        <div className="flex items-center gap-2 rounded-lg bg-green-50 px-3 py-2.5">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="shrink-0 text-green-600"
+            aria-hidden="true"
+          >
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+            <polyline points="22 4 12 14.01 9 11.01" />
+          </svg>
+          <span className="text-sm font-semibold text-green-700">
+            Last backup: {formatRelativeTime(status.last_sync)}
+          </span>
+        </div>
+
         {/* Main status indicator */}
         <div className={`flex items-center gap-3 rounded-lg p-3 ${config.bgClass}`}>
           <div className="relative flex h-3 w-3 shrink-0">
@@ -128,10 +151,6 @@ export function StatusCard({ status = MOCK_STATUS }: StatusCardProps) {
 
         {/* Footer */}
         <div className="space-y-1 text-xs text-muted-foreground">
-          <div className="flex justify-between">
-            <span>Last backup</span>
-            <span className="font-medium text-foreground">{formatRelativeTime(status.last_sync)}</span>
-          </div>
           <div className="flex justify-between">
             <span>Last seen</span>
             <span className="font-medium text-foreground">{formatRelativeTime(status.last_seen)}</span>

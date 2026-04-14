@@ -48,7 +48,7 @@ export function SavingsTracker({ monthlySavings = MOCK_SAVINGS_DOLLARS }: Saving
     <Card className="rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md cursor-default">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-          Monthly Savings
+          You Saved
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -60,7 +60,9 @@ export function SavingsTracker({ monthlySavings = MOCK_SAVINGS_DOLLARS }: Saving
           <span className="mb-1.5 text-sm text-muted-foreground">/ month</span>
         </div>
 
-        <p className="text-sm text-muted-foreground">saved this month</p>
+        <p className="text-sm text-muted-foreground">
+          by scheduling workloads during off-peak hours
+        </p>
 
         {/* Divider-like progress bar */}
         <div className="space-y-1.5">

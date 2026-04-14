@@ -1,5 +1,6 @@
 import { Header } from "@/components/header"
-import { MetricsBar } from "@/components/metrics-bar"
+import { HeroStatus } from "@/components/hero-status"
+import { QuickStats } from "@/components/quick-stats"
 import { StatusCard } from "@/components/status-card"
 import { PredictionChart } from "@/components/prediction-chart"
 import { SavingsTracker } from "@/components/savings-tracker"
@@ -98,25 +99,11 @@ export default async function DashboardPage() {
         <Header />
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8">
           <div className="space-y-5">
-            {/* Metrics summary bar */}
-            <MetricsBar />
-            {/* Row 1: Status + Hurricane */}
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <StatusCard />
-              <HurricaneCard
-                status={{
-                  active_threats: hurricaneStatus.active_threats,
-                  shield_mode: hurricaneStatus.shield_mode as "standby" | "active",
-                  last_check_minutes_ago: 0,
-                }}
-              />
-            </div>
+            {/* Level 1: Hero status banner — first thing users see */}
+            <HeroStatus />
 
-            {/* Row 2: Prediction chart — full width */}
-            <PredictionChart forecast={forecast} />
-
-            {/* Row 3: Savings + Optimal windows */}
-            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            {/* Level 2: Savings + Quick Stats + Hurricane — 3-col grid */}
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
               <SavingsTracker
                 monthlySavings={
                   windows.length > 0
@@ -126,7 +113,25 @@ export default async function DashboardPage() {
                     : 142
                 }
               />
+              <div className="flex flex-col gap-5">
+                <QuickStats />
+              </div>
+              <HurricaneCard
+                status={{
+                  active_threats: hurricaneStatus.active_threats,
+                  shield_mode: hurricaneStatus.shield_mode as "standby" | "active",
+                  last_check_minutes_ago: 0,
+                }}
+              />
+            </div>
+
+            {/* Level 3: Prediction chart — full width */}
+            <PredictionChart forecast={forecast} />
+
+            {/* Level 3-4: Optimal windows + Status */}
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               <OptimalWindows windows={windows} />
+              <StatusCard />
             </div>
           </div>
         </main>

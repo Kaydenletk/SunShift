@@ -99,8 +99,10 @@ export function OptimalWindows({ windows = MOCK_WINDOWS }: OptimalWindowsProps) 
   return (
     <Card className="rounded-xl shadow-sm transition-shadow duration-200 hover:shadow-md cursor-default">
       <CardHeader className="pb-2">
-        <CardTitle className="text-base font-semibold">Optimal Sync Windows</CardTitle>
-        <CardDescription>Best times to run heavy workloads today</CardDescription>
+        <CardTitle className="text-base font-semibold">Best Times to Run Workloads</CardTitle>
+        <CardDescription>
+          Ranked by lowest electricity cost. Schedule backups and heavy compute during these windows.
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         {top3.map((win) => {

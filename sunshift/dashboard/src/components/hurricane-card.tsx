@@ -84,6 +84,19 @@ export function HurricaneCard({ status = MOCK_HURRICANE_STATUS }: HurricaneCardP
           </div>
         </div>
 
+        {isActive && (
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Uploading to AWS Ohio</span>
+              <span className="font-mono font-semibold">78%</span>
+            </div>
+            <div className="h-2 rounded-full bg-red-100">
+              <div className="h-full rounded-full bg-red-500 transition-all" style={{ width: "78%" }} />
+            </div>
+            <p className="text-xs text-muted-foreground">127 GB — ETA ~45 minutes</p>
+          </div>
+        )}
+
         <p className={`text-xs text-center ${isActive ? "text-red-600" : "text-blue-600"}`}>
           {isActive
             ? "Workloads rescheduled for storm safety"

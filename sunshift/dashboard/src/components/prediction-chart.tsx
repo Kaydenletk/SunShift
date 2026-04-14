@@ -99,7 +99,7 @@ export function PredictionChart({ forecast = MOCK_FORECAST }: PredictionChartPro
           <div>
             <CardTitle className="text-base font-semibold">48-Hour Energy Forecast</CardTitle>
             <CardDescription className="mt-0.5">
-              Electricity cost prediction — Tampa, FL
+              Predicted electricity cost per hour. Orange zones = peak pricing. Schedule workloads during the valleys to save money.
             </CardDescription>
           </div>
           <div className="flex items-center gap-3 text-xs text-muted-foreground">
