@@ -1,7 +1,7 @@
 # backend/services/hurricane_shield.py
 from __future__ import annotations
 import enum, math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import httpx
 
 
@@ -75,3 +75,68 @@ class NOAAClient:
 
     async def close(self):
         await self._http.aclose()
+
+
+@dataclass
+class ShieldStatus:
+    shield_mode: str = "standby"  # "standby" | "active"
+    active_threats: int = 0
+    storms: list[StormInfo] = field(default_factory=list)
+    max_threat_level: ThreatLevel = ThreatLevel.NONE
+    last_check: str = ""
+    alert_message: str = ""
+
+
+class ShieldOrchestrator:
+    def __init__(self) -> None:
+        self.noaa_client = NOAAClient()
+        self.evaluator = ThreatEvaluator()
+        self.status = ShieldStatus()
+        self._demo_mode = False
+
+    async def check(self) -> ShieldStatus:
+        from datetime import datetime, timezone
+
+        if self._demo_mode:
+            return self._demo_status()
+
+        storms = await self.noaa_client.get_active_storms()
+        threat_levels = [(s, self.evaluator.evaluate(s)) for s in storms]
+
+        active_threats = sum(1 for _, level in threat_levels if level.value not in ("none", "low"))
+        max_level = max(
+            (level for _, level in threat_levels),
+            default=ThreatLevel.NONE,
+            key=lambda x: list(ThreatLevel).index(x),
+        )
+
+        self.status = ShieldStatus(
+            shield_mode="active" if max_level in (ThreatLevel.HIGH, ThreatLevel.CRITICAL) else "standby",
+            active_threats=active_threats,
+            storms=storms,
+            max_threat_level=max_level,
+            last_check=datetime.now(timezone.utc).isoformat(),
+        )
+        return self.status
+
+    def activate_demo(self) -> None:
+        self._demo_mode = True
+
+    def deactivate_demo(self) -> None:
+        self._demo_mode = False
+        self.status = ShieldStatus()
+
+    def _demo_status(self) -> ShieldStatus:
+        from datetime import datetime, timezone
+
+        return ShieldStatus(
+            shield_mode="active",
+            active_threats=1,
+            storms=[StormInfo(name="DEMO-STORM", category=3, lat=26.0, lon=-83.0, wind_mph=120)],
+            max_threat_level=ThreatLevel.CRITICAL,
+            last_check=datetime.now(timezone.utc).isoformat(),
+            alert_message=(
+                "[DEMO] Category 3 hurricane approaching Tampa Bay. "
+                "Hurricane Shield activated — all data being backed up to AWS Ohio."
+            ),
+        )

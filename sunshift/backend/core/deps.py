@@ -9,6 +9,7 @@ from fastapi import Depends
 from backend.models.agent import AgentStatus
 from backend.models.metrics import MetricsPayload
 from backend.ml.predict import PredictionService
+from backend.services.hurricane_shield import ShieldOrchestrator
 
 
 # ---------------------------------------------------------------------------
@@ -18,6 +19,7 @@ from backend.ml.predict import PredictionService
 _agent_store: dict[str, AgentStatus] = {}
 _metrics_store: list[MetricsPayload] = []
 _prediction_service: PredictionService | None = None
+_shield_orchestrator: ShieldOrchestrator | None = None
 
 
 # ---------------------------------------------------------------------------
@@ -38,6 +40,13 @@ def get_prediction_service() -> PredictionService:
     if _prediction_service is None:
         _prediction_service = PredictionService()
     return _prediction_service
+
+
+def get_shield_orchestrator() -> ShieldOrchestrator:
+    global _shield_orchestrator
+    if _shield_orchestrator is None:
+        _shield_orchestrator = ShieldOrchestrator()
+    return _shield_orchestrator
 
 
 # ---------------------------------------------------------------------------
