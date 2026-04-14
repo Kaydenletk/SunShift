@@ -15,6 +15,7 @@ class Settings(BaseSettings):
     openweathermap_api_key: str = ""
     eia_api_key: str = ""
     anthropic_api_key: str = ""
+    gemini_api_key: str = ""
 
     # ML
     model_version: str = "v0.1.0"
