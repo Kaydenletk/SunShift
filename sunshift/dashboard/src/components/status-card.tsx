@@ -111,7 +111,7 @@ export function StatusCard({ status = MOCK_STATUS }: StatusCardProps) {
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
             <polyline points="22 4 12 14.01 9 11.01" />
           </svg>
-          <span className="text-sm font-semibold text-green-700">
+          <span className="text-sm font-semibold text-green-700" suppressHydrationWarning>
             Last backup: {formatRelativeTime(status.last_sync)}
           </span>
         </div>
@@ -153,7 +153,9 @@ export function StatusCard({ status = MOCK_STATUS }: StatusCardProps) {
         <div className="space-y-1 text-xs text-muted-foreground">
           <div className="flex justify-between">
             <span>Last seen</span>
-            <span className="font-medium text-foreground">{formatRelativeTime(status.last_seen)}</span>
+            <span className="font-medium text-foreground" suppressHydrationWarning>
+              {formatRelativeTime(status.last_seen)}
+            </span>
           </div>
         </div>
       </CardContent>
