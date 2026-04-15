@@ -9,6 +9,7 @@ from backend.api.routes.metrics import router as metrics_router
 from backend.api.routes.predictions import router as predictions_router
 from backend.api.routes.commands import router as commands_router
 from backend.api.routes.hurricane import router as hurricane_router
+from backend.api.routes.scheduler import router as scheduler_router
 from backend.api.websocket import router as ws_router
 
 app = FastAPI(
@@ -28,6 +29,7 @@ app.include_router(metrics_router, prefix=API_PREFIX)
 app.include_router(predictions_router, prefix=API_PREFIX)
 app.include_router(commands_router, prefix=API_PREFIX)
 app.include_router(hurricane_router, prefix=API_PREFIX)
+app.include_router(scheduler_router, prefix=API_PREFIX)
 
 # ---------------------------------------------------------------------------
 # Mount WebSocket router (no prefix — path defined in router itself)
