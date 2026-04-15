@@ -13,6 +13,7 @@ from backend.models.scheduler import (
     Priority,
     JobStatus,
     RiskLevel,
+    EmergencyJobStatus,
     Workload,
     TimeWindow,
     CostWindow,
@@ -435,6 +436,24 @@ class TestHourlyCost:
         assert hc.cost_cents_kwh == 8.5
         assert hc.confidence == 0.92
 
+    def test_rejects_negative_cost(self):
+        now = datetime.now(timezone.utc)
+        with pytest.raises(ValidationError):
+            HourlyCost(
+                hour=now,
+                cost_cents_kwh=-5.0,
+                confidence=0.85,
+            )
+
+    def test_rejects_confidence_out_of_range(self):
+        now = datetime.now(timezone.utc)
+        with pytest.raises(ValidationError):
+            HourlyCost(
+                hour=now,
+                cost_cents_kwh=8.5,
+                confidence=1.5,
+            )
+
 
 class TestScheduleResponse:
     """Test ScheduleResponse model."""
@@ -581,11 +600,11 @@ class TestEmergencyResponse:
     def test_valid_response(self):
         resp = EmergencyResponse(
             job_id="job_emergency_001",
-            status="executing",
+            status=EmergencyJobStatus.EXECUTING,
             eta_minutes=15,
         )
         assert resp.job_id == "job_emergency_001"
-        assert resp.status == "executing"
+        assert resp.status == EmergencyJobStatus.EXECUTING
         assert resp.eta_minutes == 15
 
     def test_default_status(self):
@@ -593,7 +612,12 @@ class TestEmergencyResponse:
             job_id="job_emergency_002",
             eta_minutes=30,
         )
-        assert resp.status == "executing"
+        assert resp.status == EmergencyJobStatus.EXECUTING
+
+    def test_emergency_job_status_values(self):
+        assert EmergencyJobStatus.EXECUTING == "executing"
+        assert EmergencyJobStatus.COMPLETED == "completed"
+        assert EmergencyJobStatus.FAILED == "failed"
 
 
 class TestCancelResponse:

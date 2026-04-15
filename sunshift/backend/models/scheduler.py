@@ -207,8 +207,8 @@ class HourlyCost(BaseModel):
     """
 
     hour: datetime
-    cost_cents_kwh: float
-    confidence: float
+    cost_cents_kwh: float = Field(..., ge=0)
+    confidence: float = Field(..., ge=0, le=1)
 
 
 class ScheduleResponse(BaseModel):
@@ -321,6 +321,14 @@ class EmergencyRequest(BaseModel):
     reason: str = Field(..., pattern=r"^(hurricane|manual)$")
 
 
+class EmergencyJobStatus(str, enum.Enum):
+    """Status of an emergency job."""
+
+    EXECUTING = "executing"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
 class EmergencyResponse(BaseModel):
     """Response after triggering emergency sync.
 
@@ -331,7 +339,7 @@ class EmergencyResponse(BaseModel):
     """
 
     job_id: str
-    status: str = "executing"
+    status: EmergencyJobStatus = EmergencyJobStatus.EXECUTING
     eta_minutes: int
 
 
