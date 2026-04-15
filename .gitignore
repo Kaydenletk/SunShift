@@ -1,4 +1,31 @@
-.superpowers/
+# Dependencies
 node_modules/
+.venv/
 __pycache__/
+*.pyc
+
+# Environment
 .env
+.env.local
+*.local
+
+# Build outputs
+.next/
+dist/
+build/
+*.egg-info/
+
+# Test & Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Claude Code / AI assistants
+.claude.local.md
+.superpowers/
+docs/superpowers/
