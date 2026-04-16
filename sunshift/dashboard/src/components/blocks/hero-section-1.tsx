@@ -10,9 +10,9 @@ import { cn } from '@/lib/utils';
 import { LandingHeader } from '@/components/landing/LandingHeader';
 import { HeroSection as HeroLandingSection } from '@/components/landing/HeroSection';
 import { RealityCheckSection } from '@/components/landing/RealityCheckSection';
+import { FeaturesSection } from '@/components/landing/FeaturesSection';
 import {
   REPO_URL,
-  features,
   storyMoments,
   trustItems,
   adrLinks,
@@ -29,48 +29,7 @@ function HeroSection() {
         <HeroLandingSection />
         <RealityCheckSection />
 
-        {/* ─── Features ─── */}
-        <section id="features" className="scroll-mt-20 py-24 bg-muted/30">
-          <div className="mx-auto max-w-7xl px-6">
-            <div className="text-center">
-              <p className="text-sm font-semibold uppercase tracking-wider text-primary">
-                What You Get
-              </p>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                What SunShift Actually Does
-              </h2>
-              <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                No jargon. No guesswork. Three outcomes, six capabilities, one system.
-              </p>
-            </div>
-
-            <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {features.map((feature) => (
-                <Link
-                  key={feature.title}
-                  href={feature.href}
-                  target={feature.external ? '_blank' : undefined}
-                  rel={feature.external ? 'noreferrer' : undefined}
-                  className="group relative flex h-full flex-col rounded-xl border border-border bg-card p-6 shadow-sm transition-all hover:border-primary/30 hover:shadow-md"
-                >
-                  <div className="flex size-11 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                    <feature.icon className="size-5" />
-                  </div>
-                  <h3 className="mt-4 text-lg font-semibold leading-snug text-foreground">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    {feature.description}
-                  </p>
-                  <div className="mt-6 flex items-center gap-2 text-sm font-medium text-primary">
-                    <span>{feature.ctaLabel}</span>
-                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FeaturesSection />
 
         {/* ─── Architecture / How It Works ─── */}
         <section id="architecture" className="scroll-mt-20 py-24">
