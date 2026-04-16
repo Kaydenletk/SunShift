@@ -4,65 +4,65 @@
     {
       "id": 0,
       "subject": "Task 0: Project Scaffolding + Shared Schemas",
-      "status": "pending",
+      "status": "completed",
       "description": "**Goal:** Set up Python project with all dependencies, directory structure, shared Pydantic models, and config system.\n\n**Files:**\n- Create: sunshift/pyproject.toml, backend/core/config.py, backend/models/*.py\n- Test: tests/backend/test_models.py\n\n**Verify:** `cd sunshift && uv run pytest tests/backend/test_models.py -v`\n\n```json:metadata\n{\"files\": [\"sunshift/pyproject.toml\", \"sunshift/backend/core/config.py\", \"sunshift/backend/models/agent.py\", \"sunshift/backend/models/prediction.py\", \"sunshift/backend/models/metrics.py\", \"sunshift/backend/models/commands.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/backend/test_models.py -v\", \"acceptanceCriteria\": [\"uv sync installs all dependencies\", \"Pydantic models validate and reject correctly\", \"Config loads from env vars\", \"All model tests pass\"]}\n```"
     },
     {
       "id": 1,
       "subject": "Task 1: Data Collection Clients",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [0],
       "description": "**Goal:** Build EIA + OpenWeatherMap API clients with Pydantic validation and fallback handling.\n\n**Files:**\n- Create: sunshift/backend/ml/data_collector.py\n- Test: sunshift/tests/backend/test_data_collector.py\n\n**Verify:** `cd sunshift && uv run pytest tests/backend/test_data_collector.py -v`\n\n```json:metadata\n{\"files\": [\"sunshift/backend/ml/data_collector.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/backend/test_data_collector.py -v\", \"acceptanceCriteria\": [\"EIA client fetches hourly demand data\", \"Weather client fetches forecast\", \"Null data falls back to last known\", \"Stale data flags low confidence\"]}\n```"
     },
     {
       "id": 2,
       "subject": "Task 2: Feature Engineering Pipeline",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [1],
       "description": "**Goal:** Transform raw data into ML-ready features with cyclical encoding, lag features, interaction terms.\n\n**Files:**\n- Create: sunshift/backend/ml/features.py\n- Test: sunshift/tests/backend/test_features.py\n\n**Verify:** `cd sunshift && uv run pytest tests/backend/test_features.py -v`\n\n```json:metadata\n{\"files\": [\"sunshift/backend/ml/features.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/backend/test_features.py -v\", \"acceptanceCriteria\": [\"All 7 spec features produced\", \"Cyclical encoding correct\", \"No NaN in output\", \"Returns pandas DataFrame\"]}\n```"
     },
     {
       "id": 3,
       "subject": "Task 3: ML Model Training (Prophet + XGBoost)",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [2],
       "description": "**Goal:** Train Prophet baseline + XGBoost ensemble, evaluate, serialize models.\n\n**Files:**\n- Create: sunshift/backend/ml/model.py, sunshift/scripts/train_model.py\n- Test: sunshift/tests/backend/test_model.py\n\n**Verify:** `cd sunshift && uv run pytest tests/backend/test_model.py -v --timeout=120`\n\n```json:metadata\n{\"files\": [\"sunshift/backend/ml/model.py\", \"sunshift/scripts/train_model.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/backend/test_model.py -v --timeout=120\", \"acceptanceCriteria\": [\"Prophet trains and forecasts 48h\", \"XGBoost trains on full features\", \"Models serialize/deserialize\", \"MAPE evaluated\"]}\n```"
     },
     {
       "id": 4,
       "subject": "Task 4: Prediction Service + Optimal Window Scheduler",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [3],
       "description": "**Goal:** Prediction service with caching, circuit breaker fallback, optimal cost window finder.\n\n**Files:**\n- Create: sunshift/backend/ml/predict.py, sunshift/backend/ml/scheduler.py\n- Test: sunshift/tests/backend/test_predict.py\n\n**Verify:** `cd sunshift && uv run pytest tests/backend/test_predict.py -v`\n\n```json:metadata\n{\"files\": [\"sunshift/backend/ml/predict.py\", \"sunshift/backend/ml/scheduler.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/backend/test_predict.py -v\", \"acceptanceCriteria\": [\"Caches predictions for 1 hour\", \"Falls back to static TOU on failure\", \"Finds cheapest consecutive windows\", \"Returns PredictionResponse schema\"]}\n```"
     },
     {
       "id": 5,
       "subject": "Task 5: FastAPI Backend — Routes + WebSocket",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [4],
       "description": "**Goal:** FastAPI app with all SP1 routes and WebSocket handler.\n\n**Files:**\n- Create: sunshift/backend/main.py, backend/api/routes/*.py, backend/api/websocket.py\n- Test: sunshift/tests/backend/test_routes.py\n\n**Verify:** `cd sunshift && uv run pytest tests/backend/test_routes.py -v`\n\n```json:metadata\n{\"files\": [\"sunshift/backend/main.py\", \"sunshift/backend/api/routes/agents.py\", \"sunshift/backend/api/routes/predictions.py\", \"sunshift/backend/api/routes/metrics.py\", \"sunshift/backend/api/routes/commands.py\", \"sunshift/backend/api/websocket.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/backend/test_routes.py -v\", \"acceptanceCriteria\": [\"POST agents/register creates agent\", \"POST metrics/ingest accepts metrics\", \"GET predictions/energy returns 48h forecast\", \"WebSocket sends commands and receives heartbeats\"]}\n```"
     },
     {
       "id": 6,
       "subject": "Task 6: On-Prem Agent — Collector + Config",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [0],
       "description": "**Goal:** Agent config loader, SQLite buffer, system metrics collector.\n\n**Files:**\n- Create: sunshift/agent/config.py, agent/db.py, agent/collector.py\n- Test: sunshift/tests/agent/test_collector.py\n\n**Verify:** `cd sunshift && uv run pytest tests/agent/test_collector.py -v`\n\n```json:metadata\n{\"files\": [\"sunshift/agent/config.py\", \"sunshift/agent/db.py\", \"sunshift/agent/collector.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/agent/test_collector.py -v\", \"acceptanceCriteria\": [\"Config loads from YAML\", \"SQLite stores metrics with retention\", \"Collector reads CPU/RAM/Disk/Network\"]}\n```"
     },
     {
       "id": 7,
       "subject": "Task 7: On-Prem Agent — Command Receiver + Main",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [6],
       "description": "**Goal:** WebSocket client with reconnect, heartbeat, command dispatch, agent main entry.\n\n**Files:**\n- Create: sunshift/agent/command_receiver.py, agent/main.py\n- Test: sunshift/tests/agent/test_command_receiver.py\n\n**Verify:** `cd sunshift && uv run pytest tests/agent/test_command_receiver.py -v`\n\n```json:metadata\n{\"files\": [\"sunshift/agent/command_receiver.py\", \"sunshift/agent/main.py\"], \"verifyCommand\": \"cd sunshift && uv run pytest tests/agent/test_command_receiver.py -v\", \"acceptanceCriteria\": [\"WebSocket connects and sends heartbeat\", \"Commands dispatched to handlers\", \"Exponential backoff on disconnect\", \"Agent main orchestrates collector + receiver\"]}\n```"
     },
     {
       "id": 8,
       "subject": "Task 8: Docker + Integration Verification",
-      "status": "pending",
+      "status": "completed",
       "blockedBy": [5, 7],
       "description": "**Goal:** Docker setup + verify full stack: backend serves predictions, agent connects.\n\n**Files:**\n- Create: sunshift/Dockerfile, sunshift/docker-compose.yml\n\n**Verify:** `cd sunshift && docker compose up -d && sleep 3 && curl http://localhost:8000/health`\n\n```json:metadata\n{\"files\": [\"sunshift/Dockerfile\", \"sunshift/docker-compose.yml\"], \"verifyCommand\": \"cd sunshift && docker compose up -d && sleep 3 && curl http://localhost:8000/health\", \"acceptanceCriteria\": [\"docker compose up starts backend\", \"health endpoint returns ok\", \"predictions endpoint returns 48h forecast\", \"Full test suite passes with >80% coverage\"]}\n```"
     }
   ],
-  "lastUpdated": "2026-04-13T16:00:00Z"
+  "lastUpdated": "2026-04-15T10:00:00Z"
 }

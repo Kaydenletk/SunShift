@@ -25,6 +25,10 @@ htmlcov/
 .vscode/
 *.swp
 
+# OS
+.DS_Store
+Thumbs.db
+
 # Claude Code / AI assistants
 .claude.local.md
 .superpowers/

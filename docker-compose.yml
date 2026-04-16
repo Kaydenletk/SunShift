@@ -1,0 +1,35 @@
+# SunShift Docker Compose - Local Development Stack
+# Usage: make demo
+
+services:
+  backend:
+    build:
+      context: ./sunshift/backend
+      dockerfile: Dockerfile
+    container_name: sunshift-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - SUNSHIFT_DEBUG=${SUNSHIFT_DEBUG:-false}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+
+  dashboard:
+    build:
+      context: ./sunshift/dashboard
+      dockerfile: Dockerfile
+    container_name: sunshift-dashboard
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
