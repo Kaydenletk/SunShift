@@ -1,0 +1,96 @@
+{
+  "planPath": "docs/plans/2026-04-16-landing-refactor.md",
+  "tasks": [
+    {
+      "id": 0,
+      "subject": "Task 0: Fix root-qualified anchors, normalize REPO_URL, add Zod",
+      "status": "pending",
+      "description": "**Goal:** Make existing tests/landing-links.test.mjs pass without structural refactor. Fix two real bugs: bare #features anchors don't work from /dashboard, and repo URL case mismatch. Install zod in preparation for waitlist API.\n\n**Files:**\n- Modify: sunshift/dashboard/src/components/blocks/hero-section-1.tsx\n- Modify: sunshift/dashboard/package.json (add zod)\n\n**Acceptance Criteria:**\n- All four menu items use root-qualified hashes (/#features, /#architecture, /#pricing, /#docs)\n- repoUrl constant is https://github.com/Kaydenletk/SunShift (correct casing)\n- zod@^3 installed\n- pnpm build succeeds\n- node --test tests/landing-links.test.mjs passes\n\n**Verify:** `cd sunshift/dashboard && pnpm build && node --test tests/landing-links.test.mjs` → build OK, # pass 3\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/blocks/hero-section-1.tsx\", \"sunshift/dashboard/package.json\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build && node --test tests/landing-links.test.mjs\", \"acceptanceCriteria\": [\"menu items use /#anchor form\", \"REPO_URL uses correct casing\", \"zod installed\", \"build passes\", \"landing-links test passes\"]}\n```"
+    },
+    {
+      "id": 1,
+      "subject": "Task 1: Extract constants.ts (landing data module)",
+      "status": "pending",
+      "blockedBy": [0],
+      "description": "**Goal:** Pull all landing-page data into src/components/landing/constants.ts. No JSX, no runtime. Update existing test to read from new location.\n\n**Files:**\n- Create: sunshift/dashboard/src/components/landing/constants.ts\n- Modify: sunshift/dashboard/src/components/blocks/hero-section-1.tsx (delete inline consts, import)\n- Modify: sunshift/dashboard/tests/landing-links.test.mjs (read from constants.ts)\n\n**Verify:** `cd sunshift/dashboard && pnpm build && node --test tests/landing-links.test.mjs` → build OK, # pass 3\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/landing/constants.ts\", \"sunshift/dashboard/src/components/blocks/hero-section-1.tsx\", \"sunshift/dashboard/tests/landing-links.test.mjs\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build && node --test tests/landing-links.test.mjs\", \"acceptanceCriteria\": [\"constants.ts exports REPO_URL, menuItems, features, storyMoments, adrLinks, trustItems, riskStats, techBadges\", \"hero-section-1.tsx imports from constants\", \"test reads from new location and passes\", \"build passes\"]}\n```"
+    },
+    {
+      "id": 2,
+      "subject": "Task 2: Extract LandingHeader.tsx (client component)",
+      "status": "pending",
+      "blockedBy": [1],
+      "description": "**Goal:** Move fixed nav + mobile menu + scroll listener into its own client component. Zero behavior change.\n\n**Files:**\n- Create: sunshift/dashboard/src/components/landing/LandingHeader.tsx (with 'use client')\n- Modify: sunshift/dashboard/src/components/blocks/hero-section-1.tsx (delete HeroHeader, import LandingHeader)\n\n**Verify:** `cd sunshift/dashboard && pnpm build` succeeds; manual dev check — scroll fades header bg, mobile hamburger toggles menu, link click closes menu.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/landing/LandingHeader.tsx\", \"sunshift/dashboard/src/components/blocks/hero-section-1.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build\", \"acceptanceCriteria\": [\"'use client' directive at top\", \"imports menuItems from constants\", \"scroll listener cleaned up in effect return\", \"mobile menu closes on link click\", \"build passes\"]}\n```"
+    },
+    {
+      "id": 3,
+      "subject": "Task 3: Extract HeroSection.tsx and RealityCheckSection.tsx",
+      "status": "pending",
+      "blockedBy": [2],
+      "description": "**Goal:** Move above-the-fold hero and 3-stat reality check into server components. Visual parity required.\n\n**Files:**\n- Create: sunshift/dashboard/src/components/landing/HeroSection.tsx\n- Create: sunshift/dashboard/src/components/landing/RealityCheckSection.tsx\n- Modify: sunshift/dashboard/src/components/blocks/hero-section-1.tsx\n\n**Verify:** `cd sunshift/dashboard && pnpm build` → success. Manual dev render matches pre-task state.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/landing/HeroSection.tsx\", \"sunshift/dashboard/src/components/landing/RealityCheckSection.tsx\", \"sunshift/dashboard/src/components/blocks/hero-section-1.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build\", \"acceptanceCriteria\": [\"both are server components (no 'use client')\", \"HeroSection imports techBadges\", \"RealityCheckSection imports riskStats\", \"visual parity preserved\", \"build passes\"]}\n```"
+    },
+    {
+      "id": 4,
+      "subject": "Task 4: Extract FeaturesSection.tsx with graceful-degrade card structure",
+      "status": "pending",
+      "blockedBy": [3],
+      "description": "**Goal:** Move features into own server component AND restructure cards. Card body is <article>, not <Link>. GitHub URL becomes a small 'View source →' secondary link at card footer. If URL 404s, only the link breaks — card's content still lands.\n\n**Files:**\n- Create: sunshift/dashboard/src/components/landing/FeaturesSection.tsx\n- Modify: sunshift/dashboard/src/components/blocks/hero-section-1.tsx\n\n**Verify:** `cd sunshift/dashboard && pnpm build` succeeds. Dev server: clicking card body does NOT navigate; only 'View source →' opens GitHub.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/landing/FeaturesSection.tsx\", \"sunshift/dashboard/src/components/blocks/hero-section-1.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build\", \"acceptanceCriteria\": [\"cards render as <article>, not <Link>\", \"secondary <a> at card footer with ctaLabel + ArrowRight\", \"external links use target=_blank rel=noreferrer\", \"internal links (/) use <Link>\", \"three-pillar grouping preserved\", \"build passes\"]}\n```"
+    },
+    {
+      "id": 5,
+      "subject": "Task 5: Extract ArchitectureSection.tsx with same card structure",
+      "status": "pending",
+      "blockedBy": [4],
+      "description": "**Goal:** Move architecture (geographic callout + 3 story moments + trust strip + ADR pills + closer) into own component. Story moment cards follow same non-link-body pattern as features. ADR pills remain as <Link>.\n\n**Files:**\n- Create: sunshift/dashboard/src/components/landing/ArchitectureSection.tsx\n- Modify: sunshift/dashboard/src/components/blocks/hero-section-1.tsx\n\n**Verify:** `cd sunshift/dashboard && pnpm build` succeeds; visual parity.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/landing/ArchitectureSection.tsx\", \"sunshift/dashboard/src/components/blocks/hero-section-1.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build\", \"acceptanceCriteria\": [\"story moment cards are <article> (not Link)\", \"ADR pills remain as <Link>\", \"geographic callout preserved\", \"trust strip preserved\", \"section IDs preserved\", \"build passes\"]}\n```"
+    },
+    {
+      "id": 6,
+      "subject": "Task 6: Extract PricingSection.tsx, DocsSection.tsx, LandingFooter.tsx",
+      "status": "pending",
+      "blockedBy": [5],
+      "description": "**Goal:** Complete the per-section extraction with three small pure-presentational server components.\n\n**Files:**\n- Create: sunshift/dashboard/src/components/landing/PricingSection.tsx\n- Create: sunshift/dashboard/src/components/landing/DocsSection.tsx (uses REPO_URL from constants)\n- Create: sunshift/dashboard/src/components/landing/LandingFooter.tsx\n- Modify: sunshift/dashboard/src/components/blocks/hero-section-1.tsx\n\n**Verify:** `cd sunshift/dashboard && pnpm build` → success; visual parity.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/landing/PricingSection.tsx\", \"sunshift/dashboard/src/components/landing/DocsSection.tsx\", \"sunshift/dashboard/src/components/landing/LandingFooter.tsx\", \"sunshift/dashboard/src/components/blocks/hero-section-1.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build\", \"acceptanceCriteria\": [\"all three are server components\", \"DocsSection uses REPO_URL constant\", \"Most Popular badge preserved on Business tier\", \"terminal mockup preserved\", \"footer has Sun icon + copyright + tagline\", \"build passes\"]}\n```"
+    },
+    {
+      "id": 7,
+      "subject": "Task 7: Wire app/page.tsx to landing components, delete hero-section-1.tsx",
+      "status": "pending",
+      "blockedBy": [6],
+      "description": "**Goal:** page.tsx composes landing components directly. Delete hero-section-1.tsx entirely. No imports pointing to the deleted file.\n\n**Files:**\n- Modify: sunshift/dashboard/src/app/page.tsx\n- Delete: sunshift/dashboard/src/components/blocks/hero-section-1.tsx\n- Delete: sunshift/dashboard/src/components/blocks/ (empty directory)\n\n**Verify:** `cd sunshift/dashboard && pnpm build && node --test tests/landing-links.test.mjs` → build OK, # pass 3. No grep matches for `blocks/hero-section`.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/app/page.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build && node --test tests/landing-links.test.mjs\", \"acceptanceCriteria\": [\"page.tsx imports 9 landing components\", \"order: Header, Hero, RealityCheck, Features, Architecture, Pricing, Docs, Footer (Waitlist added in Task 11)\", \"hero-section-1.tsx deleted\", \"grep -rn 'blocks/hero-section' returns no matches\", \"landing-links test passes\"]}\n```"
+    },
+    {
+      "id": 8,
+      "subject": "Task 8: Waitlist storage helper + Zod schema (TDD, unit tests)",
+      "status": "pending",
+      "blockedBy": [7],
+      "description": "**Goal:** File-backed waitlist store with atomic writes, Zod schema. Pure logic, no Next.js runtime. TDD: tests first.\n\n**Files:**\n- Create: sunshift/dashboard/src/lib/waitlist-schema.ts\n- Create: sunshift/dashboard/src/lib/waitlist-storage.ts\n- Create: sunshift/dashboard/tests/waitlist-storage.test.mjs\n- Modify: .gitignore (add data/)\n- Modify: sunshift/dashboard/package.json (add tsx devDep)\n\n**Verify:** `cd sunshift/dashboard && node --import tsx --test tests/waitlist-storage.test.mjs` → 7+ tests pass.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/lib/waitlist-schema.ts\", \"sunshift/dashboard/src/lib/waitlist-storage.ts\", \"sunshift/dashboard/tests/waitlist-storage.test.mjs\", \".gitignore\", \"sunshift/dashboard/package.json\"], \"verifyCommand\": \"cd sunshift/dashboard && node --import tsx --test tests/waitlist-storage.test.mjs\", \"acceptanceCriteria\": [\"waitlistEntrySchema validates email and lowercases\", \"loadWaitlist returns {entries:[]} on missing file\", \"appendToWaitlist writes atomically via .tmp + rename\", \"hasEmail is case-insensitive\", \"malformed JSON surfaces clear error\", \"data/ gitignored\", \"all 7 tests pass\"]}\n```"
+    },
+    {
+      "id": 9,
+      "subject": "Task 9: Rate limiter + POST /api/waitlist route (TDD, integration tests)",
+      "status": "pending",
+      "blockedBy": [8],
+      "description": "**Goal:** Next.js App Router API route with in-memory rate limiter (5/hr per IP). Integration-tested against temp file via WAITLIST_FILE env override.\n\n**Files:**\n- Create: sunshift/dashboard/src/lib/rate-limit.ts\n- Create: sunshift/dashboard/src/app/api/waitlist/route.ts\n- Create: sunshift/dashboard/tests/waitlist-route.test.mjs\n\n**Verify:** `cd sunshift/dashboard && node --import tsx --test tests/waitlist-route.test.mjs` → 5 tests pass.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/lib/rate-limit.ts\", \"sunshift/dashboard/src/app/api/waitlist/route.ts\", \"sunshift/dashboard/tests/waitlist-route.test.mjs\"], \"verifyCommand\": \"cd sunshift/dashboard && node --import tsx --test tests/waitlist-route.test.mjs\", \"acceptanceCriteria\": [\"valid email returns 200 {success:true}\", \"invalid email returns 400 INVALID_EMAIL\", \"duplicate returns 200 with 'already on the list' copy\", \"6th request from same IP returns 429 RATE_LIMITED\", \"malformed JSON returns 400 INVALID_EMAIL\", \"no stack traces leaked to client\", \"all 5 tests pass\"]}\n```"
+    },
+    {
+      "id": 10,
+      "subject": "Task 10: WaitlistCTA.tsx (client component with 4 form states)",
+      "status": "pending",
+      "blockedBy": [9],
+      "description": "**Goal:** User-facing email form with idle/submitting/success/error states. Maps API error codes to friendly messages.\n\n**Files:**\n- Create: sunshift/dashboard/src/components/landing/WaitlistCTA.tsx\n\n**Verify:** `cd sunshift/dashboard && pnpm build` succeeds. Manual dev test in Task 11.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/components/landing/WaitlistCTA.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build\", \"acceptanceCriteria\": [\"'use client' directive\", \"useState for email, status\", \"POST /api/waitlist with JSON body\", \"error codes mapped to friendly messages\", \"aria-invalid, aria-describedby for a11y\", \"role=status on success, role=alert on error\", \"button disabled during submit\", \"build passes\"]}\n```"
+    },
+    {
+      "id": 11,
+      "subject": "Task 11: Wire WaitlistCTA into page.tsx + end-to-end smoke",
+      "status": "pending",
+      "blockedBy": [10],
+      "description": "**Goal:** Insert waitlist band between Pricing and Docs. Run dev server and submit form for real against actual API. Verify data/waitlist.json persists.\n\n**Files:**\n- Modify: sunshift/dashboard/src/app/page.tsx\n\n**Verify:** `cd sunshift/dashboard && pnpm dev` — manual submit valid/invalid/duplicate emails; `cat data/waitlist.json` shows persisted entries.\n\n```json:metadata\n{\"files\": [\"sunshift/dashboard/src/app/page.tsx\"], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build\", \"acceptanceCriteria\": [\"WaitlistCTA rendered between Pricing and Docs\", \"dev server: valid email produces success UI\", \"data/waitlist.json contains the entry\", \"second submit of same email shows 'already on the list'\", \"invalid email shows red error\"]}\n```"
+    },
+    {
+      "id": 12,
+      "subject": "Task 12: Final verification + PR prep",
+      "status": "pending",
+      "blockedBy": [11],
+      "description": "**Goal:** Run full local validation suite and open PR. Clean up stray artifacts.\n\n**Files:** None modified — verification only.\n\n**Verify:**\n```\ncd sunshift/dashboard && pnpm build && pnpm lint\nnode --test tests/landing-links.test.mjs\nnode --import tsx --test tests/waitlist-storage.test.mjs\nnode --import tsx --test tests/waitlist-route.test.mjs\n```\nAll green. Then: manual click-through checklist, then `gh pr create`.\n\n```json:metadata\n{\"files\": [], \"verifyCommand\": \"cd sunshift/dashboard && pnpm build && pnpm lint && node --test tests/landing-links.test.mjs && node --import tsx --test tests/waitlist-storage.test.mjs && node --import tsx --test tests/waitlist-route.test.mjs\", \"acceptanceCriteria\": [\"pnpm build succeeds\", \"pnpm lint passes\", \"all 3 test files pass\", \"manual click-through checklist complete\", \"data/waitlist.json gitignored\", \"nav anchors work from /dashboard (original bug fixed)\", \"PR opened with summary referencing spec + plan\"]}\n```"
+    }
+  ],
+  "lastUpdated": "2026-04-16T00:00:00Z"
+}

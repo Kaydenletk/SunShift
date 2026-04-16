@@ -62,10 +62,10 @@ export function LandingHeader() {
           >
             Login
           </Link>
-          <a href="/#pricing" className={cn(buttonVariants({ size: 'sm' }))}>
+          <Link href="/#pricing" className={cn(buttonVariants({ size: 'sm' }))}>
             Start Free Trial
             <ArrowRight className="ml-1 size-3.5" />
-          </a>
+          </Link>
         </div>
 
         <button
@@ -97,10 +97,10 @@ export function LandingHeader() {
               >
                 Login
               </Link>
-              <a href="/#pricing" className={cn(buttonVariants({ size: 'sm' }))}>
+              <Link href="/#pricing" className={cn(buttonVariants({ size: 'sm' }))}>
                 Start Free Trial
                 <ArrowRight className="ml-1 size-3.5" />
-              </a>
+              </Link>
             </div>
           </nav>
         </div>

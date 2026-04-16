@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { ArrowRight, ChevronRight, Shield } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { AnimatedGroup } from '@/components/ui/animated-group';
@@ -21,14 +22,14 @@ export function HeroSection() {
           preset="blur-slide"
           className="flex flex-col items-center text-center"
         >
-          <a
+          <Link
             href="/#features"
             className="group flex items-center gap-2 rounded-full border border-border bg-muted px-4 py-1.5 text-sm text-muted-foreground shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
           >
             <Shield className="size-3.5 text-primary" />
             <span>Now protecting Tampa Bay businesses</span>
             <ChevronRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
-          </a>
+          </Link>
 
           <h1 className="mt-8 max-w-4xl text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl">
             Your Data. Protected from{' '}
@@ -43,19 +44,19 @@ export function HeroSection() {
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-3 sm:flex-row">
-            <a
+            <Link
               href="/#pricing"
               className={cn(buttonVariants({ size: 'lg' }))}
             >
               Start Free Trial
               <ArrowRight className="ml-1 size-4" />
-            </a>
-            <a
+            </Link>
+            <Link
               href="/#architecture"
               className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
             >
               How It Works
-            </a>
+            </Link>
           </div>
         </AnimatedGroup>
 
