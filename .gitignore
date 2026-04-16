@@ -33,3 +33,6 @@ Thumbs.db
 .claude.local.md
 .superpowers/
 docs/superpowers/
+
+# Runtime data
+data/
